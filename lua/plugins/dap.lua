@@ -18,6 +18,36 @@ return {
           -- setup dap config by VsCode launch.json file
           -- require("dap.ext.vscode").load_launchjs()
           local dap = require("dap")
+          dap.adapters.cppdbg = {
+            id = "cppdbg",
+            type = "executable",
+            command = "/home/capom/.config/nvim/vscode-cpptools/extension/debugAdapters/bin/OpenDebugAD7",
+          }
+
+          -- Function to load launch.json
+          local function load_launch_json()
+            require("dap.ext.vscode").load_launchjs(nil, { cppdbg = { "c", "cpp" } })
+          end
+
+          local load_config = function()
+            if vim.fn.filereadable("{$workspace}/.vscode/launch.json") then
+              load_launch_json()
+
+              local configurations = require("dap").list_launch_configs()
+              local names = {}
+
+              for _, config in ipairs(configurations) do
+                table.insert(names, config.name)
+              end
+
+              local choice = vim.fn.inputlist(names)
+              local selected_config = configurations[choice]
+
+              -- Start debugging with the selected configuration
+              require("dap").continue(selected_config)
+            end
+          end
+
           local dapui = require("dapui")
           dapui.setup(opts)
           dap.listeners.after.event_initialized["dapui_config"] = function()
@@ -29,6 +59,8 @@ return {
           dap.listeners.before.event_exited["dapui_config"] = function()
             dapui.close({})
           end
+
+          load_config()
         end,
       },
 
@@ -71,6 +103,7 @@ return {
         },
       },
     },
+
 
   -- stylua: ignore
   keys = {
