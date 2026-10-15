@@ -30,7 +30,11 @@ return {
       {
         "<leader>ff",
         function()
-          require("telescope.builtin").find_files({ cwd = vim.fn.getcwd() })
+          local cwd = vim.fn.getcwd()
+          require("telescope.builtin").find_files({
+            cwd = cwd,
+            prompt_title = "Find Files (cwd): " .. vim.fn.fnamemodify(cwd, ":~"),
+          })
         end,
         desc = "Find Files (cwd)",
       },
@@ -38,7 +42,11 @@ return {
       {
         "<leader>fF",
         function()
-          require("telescope.builtin").live_grep({ cwd = vim.fn.getcwd() })
+          local cwd = vim.fn.getcwd()
+          require("telescope.builtin").live_grep({
+            cwd = cwd,
+            prompt_title = "Grep (cwd): " .. vim.fn.fnamemodify(cwd, ":~"),
+          })
         end,
         desc = "Grep (cwd)",
       },
@@ -46,7 +54,11 @@ return {
       {
         "<leader>fb",
         function()
-          require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })
+          local cwd = vim.fn.expand("%:p:h")
+          require("telescope.builtin").find_files({
+            cwd = cwd,
+            prompt_title = "Find Files (Buffer Dir): " .. vim.fn.fnamemodify(cwd, ":~"),
+          })
         end,
         desc = "Find Files (Buffer Dir)",
       },
@@ -54,7 +66,11 @@ return {
       {
         "<leader>fB",
         function()
-          require("telescope.builtin").live_grep({ cwd = vim.fn.expand("%:p:h") })
+          local cwd = vim.fn.expand("%:p:h")
+          require("telescope.builtin").live_grep({
+            cwd = cwd,
+            prompt_title = "Grep (Buffer Dir): " .. vim.fn.fnamemodify(cwd, ":~"),
+          })
         end,
         desc = "Grep (Buffer Dir)",
       },
