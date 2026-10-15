@@ -2,6 +2,14 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     keys = {
+      -- Browse previously opened pickers (query + results restored)
+      {
+        "<leader>fh",
+        function()
+          require("telescope.builtin").pickers()
+        end,
+        desc = "Picker History",
+      },
       -- Find plugin files
       {
         "<leader>fp",
@@ -17,6 +25,22 @@ return {
           require("telescope.builtin").live_grep({ cwd = require("lazy.core.config").options.root })
         end,
         desc = "Grep Plugin Files",
+      },
+      -- Find files from the directory nvim was launched in
+      {
+        "<leader>ff",
+        function()
+          require("telescope.builtin").find_files({ cwd = vim.fn.getcwd() })
+        end,
+        desc = "Find Files (cwd)",
+      },
+      -- Grep from the directory nvim was launched in
+      {
+        "<leader>fF",
+        function()
+          require("telescope.builtin").live_grep({ cwd = vim.fn.getcwd() })
+        end,
+        desc = "Grep (cwd)",
       },
       -- Find files in current buffer's directory
       {
@@ -85,32 +109,49 @@ return {
         desc = "Grep Cargo Workspace",
       },
     },
-    opts = {
-      defaults = {
-        layout_strategy = "horizontal",
-        layout_config = {
-          prompt_position = "top",
-          preview_width = 0.55,
+    opts = function(_, opts)
+      return vim.tbl_deep_extend("force", opts, {
+        defaults = {
+          layout_strategy = "horizontal",
+          layout_config = {
+            prompt_position = "top",
+            preview_width = 0.55,
+          },
+          sorting_strategy = "ascending",
+          file_ignore_patterns = {
+            "node_modules",
+            ".git/",
+            "target/",
+            "dist/",
+            "build/",
+          },
+          -- Persistent prompt history (plain file, survives restarts)
+          history = {
+            path = vim.fn.stdpath("data") .. "/telescope_history",
+            limit = 200,
+          },
+          -- Keep recent pickers in memory for builtin.pickers (<leader>fh)
+          cache_picker = {
+            num_pickers = 20,
+          },
+          mappings = {
+            i = {
+              ["<S-Down>"] = require("telescope.actions").cycle_history_next,
+              ["<S-Up>"] = require("telescope.actions").cycle_history_prev,
+            },
+          },
         },
-        sorting_strategy = "ascending",
-        file_ignore_patterns = {
-          "node_modules",
-          ".git/",
-          "target/",
-          "dist/",
-          "build/",
+        pickers = {
+          find_files = {
+            hidden = true, -- Show hidden files
+          },
+          live_grep = {
+            additional_args = function()
+              return { "--hidden" } -- Grep hidden files
+            end,
+          },
         },
-      },
-      pickers = {
-        find_files = {
-          hidden = true, -- Show hidden files
-        },
-        live_grep = {
-          additional_args = function()
-            return { "--hidden" } -- Grep hidden files
-          end,
-        },
-      },
-    },
+      })
+    end,
   },
 }
