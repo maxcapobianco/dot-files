@@ -1,9 +1,8 @@
-## Tmux Config
+# tmux configuration
 
-Required TPM.
+Run `./install.sh` from the repository root to link the config, install TPM and
+its plugins, and install JetBrains Mono Nerd Font. See the [installation guide](../README.md).
 
-in home dir run:
-
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
-Need to install a nerdfont, recommend JetbrainsMono.
+Select **JetBrainsMono Nerd Font Mono** in your terminal settings. The tmux prefix
+is **Ctrl-a**; press prefix then **I** to install newly added plugins manually.
+Reload with `tmux source-file ~/.tmux.conf`.
