@@ -12,9 +12,12 @@ fi
 data_dir="${XDG_DATA_HOME:-$HOME/.local/share}"
 font_version="v3.5.1"
 case "$(uname -s)" in
-  Linux) font_dir="$data_dir/fonts/JetBrainsMonoNerdFont" ;;
-  Darwin) font_dir="$HOME/Library/Fonts/JetBrainsMonoNerdFont" ;;
-  *) printf 'Font installation supports Linux and macOS only.\n' >&2; exit 1 ;;
+Linux) font_dir="$data_dir/fonts/JetBrainsMonoNerdFont" ;;
+Darwin) font_dir="$HOME/Library/Fonts/JetBrainsMonoNerdFont" ;;
+*)
+  printf 'Font installation supports Linux and macOS only.\n' >&2
+  exit 1
+  ;;
 esac
 if [[ "$data_dir" != /* ]]; then
   printf 'XDG_DATA_HOME must be an absolute path.\n' >&2
@@ -61,6 +64,7 @@ link_config() {
 
 link_config "$repo_dir/nvim" "$config_dir/nvim"
 link_config "$repo_dir/tmux/tmux.conf" "$HOME/.tmux.conf"
+link_config "$repo_dir/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
 
 # Use a private tmux server so installing plugins does not alter live sessions.
 install_tmux_plugins() (

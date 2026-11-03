@@ -1,0 +1,13 @@
+# Alacritty Configuration File (alacritty.toml)
+[terminal]
+shell.program="tmux"
+
+# Font Settings
+[font]
+normal.family =  "JetBrainsMono"
+normal.style = "Regular"
+size = 12.0
+
+# Window Settings
+[window]
+startup_mode = "Fullscreen"
