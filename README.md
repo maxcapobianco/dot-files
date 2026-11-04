@@ -5,6 +5,7 @@ Neovim (LazyVim) and tmux configuration in one repository.
 ```text
 nvim/          Neovim config, plugins, and plugin lockfile
 tmux/         tmux config and plugin notes
+alacritty/    Alacritty config, including Dracula+ colors
 install.sh     Install symlinks, preserving existing configs
 ```
 
@@ -27,6 +28,7 @@ The installer creates:
 | --- | --- |
 | `${XDG_CONFIG_HOME:-~/.config}/nvim` | `<repo>/nvim` |
 | `~/.tmux.conf` | `<repo>/tmux/tmux.conf` |
+| `~/.config/alacritty/alacritty.toml` | `<repo>/alacritty/alacritty.toml` |
 
 Existing files, directories, and different or broken symlinks are moved to a
 unique sibling backup directory, such as `~/.config/nvim.backup.ABC12345/original`.
