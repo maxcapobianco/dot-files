@@ -83,6 +83,22 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+ssh() {
+  if [[ -z $TMUX_PANE ]]; then
+    command ssh "$@"
+    return
+  fi
+
+  tmux set-option -p -t "$TMUX_PANE" window-style 'bg=#3b304b'
+  tmux set-option -p -t "$TMUX_PANE" window-active-style 'bg=#3b304b'
+  {
+    command ssh "$@"
+  } always {
+    tmux set-option -pu -t "$TMUX_PANE" window-style
+    tmux set-option -pu -t "$TMUX_PANE" window-active-style
+  }
+}
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
