@@ -3,6 +3,7 @@ return {
     "mrcjkb/rustaceanvim",
     opts = function(_, opts)
       opts.server = opts.server or {}
+      opts.server.cmd = { "rustup", "run", "stable", "rust-analyzer" }
       opts.server.default_settings = {
         ["rust-analyzer"] = {
           -- Performance settings
@@ -14,6 +15,9 @@ return {
           -- handling (goto-def/references) whenever a background check/index
           -- was running, which is why navigation appeared broken.
           checkOnSave = true,
+          lru = {
+            capacity = 32,
+          },
 
           procMacro = {
             enable = true, -- or true with limited attributes
