@@ -39,7 +39,7 @@ if [[ -f "$config_dir/tmux/tmux.conf" && ! "$config_dir/tmux/tmux.conf" -ef "$re
 fi
 
 # Validate everything before changing existing configuration.
-for source in "$repo_dir/nvim/init.lua" "$repo_dir/tmux/tmux.conf"; do
+for source in "$repo_dir/nvim/init.lua" "$repo_dir/tmux/tmux.conf" "$repo_dir/zsh/.zshrc" "$repo_dir/zsh/agnoster.zsh-theme"; do
   if [[ ! -f "$source" ]]; then
     printf 'Missing config: %s\n' "$source" >&2
     exit 1
@@ -62,9 +62,23 @@ link_config() {
   printf 'Linked: %s -> %s\n' "$destination" "$source"
 }
 
+install_oh_my_zsh() {
+  local omz_dir="$HOME/.oh-my-zsh"
+  if [[ ! -e "$omz_dir" && ! -L "$omz_dir" ]]; then
+    git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh.git "$omz_dir"
+  fi
+  if [[ ! -f "$omz_dir/oh-my-zsh.sh" ]]; then
+    printf 'Invalid Oh My Zsh installation: %s\n' "$omz_dir" >&2
+    exit 1
+  fi
+}
+
+install_oh_my_zsh
 link_config "$repo_dir/nvim" "$config_dir/nvim"
 link_config "$repo_dir/tmux/tmux.conf" "$HOME/.tmux.conf"
 link_config "$repo_dir/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
+link_config "$repo_dir/zsh/.zshrc" "$HOME/.zshrc"
+link_config "$repo_dir/zsh/agnoster.zsh-theme" "$HOME/.oh-my-zsh/custom/themes/agnoster.zsh-theme"
 
 # Use a private tmux server so installing plugins does not alter live sessions.
 install_tmux_plugins() (
